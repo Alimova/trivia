@@ -13,23 +13,44 @@
     <div id="lcol">Correct Answers: 0</div>
     <div id="rcol">Total Questions: 0</div>
 </div>
-    <h1 id="num" align="middle">Question #5637</h1>
-    <h4>Category:energy</h4>
-    <div class="question">Nearly all artificial satellites are being charged with batteries powered by this</div>
-    <div class="button">SKIP</div>
-    <div class="constructor"></div>
-    <div class="letters">sun</div>
-
-<!--
-<script>
-    var resp = JSON.parse(xhr.response);
-    document.getElementById("quiz").innerHTML = resp.id + "<br>" +
-    resp.question + "<br>" +
-    resp.answer;
-</script>
--->
-
+    <h1 id="num" align="middle">Question #</h1>
+<!--<h1 id="num"></h1>-->
+    <h4 id="category">Category:</h4>
+    <div class="question" id="question">Nearly all artificial satellites are being charged with batteries powered by this</div>
+    <div class="button" id="click" onclick="reload">SKIP</div>
+    <div class="constructor" id="constructor"></div>
+    <ul class="letters" id="letters"></ul>
 
 <script src="index.js"></script>
+<script>
+    var resp = JSON.parse(xhr.response);
+    document.getElementById("question").innerHTML = resp[0].question;
+    document.getElementById("num").innerHTML = document.getElementById("num").innerHTML+resp[0].id;
+    document.getElementById("category").innerHTML = document.getElementById("category").innerHTML+resp[0].category.title;
+
+    //answer would be here
+    var unorderedList = document.getElementById("letters");
+    for (i = 0; i < resp[0].answer.length; i++ ) {
+        var item = document.createElement('li');
+        item.appendChild(document.createTextNode(resp[0].answer[i]));
+        unorderedList.appendChild(item);
+    }
+
+    //var ul = document.getElementById("letters");
+    //var items = ul.getElementsByTagName("li");
+    //for (var i = 0; i < items.length; ++i) {
+        // do something with items[i], which is a <li> element
+    //}
+    document.getElementById("click").onclick = function reload()
+    {
+        Reload();
+        //validation code to see State field is mandatory.
+    }
+
+    //console.log(resp);
+    console.log(resp[0].answer[0]);
+    //console.log(document.getElementById("num").innerText);
+</script>
+
 </body>
 </html>

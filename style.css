@@ -27,6 +27,17 @@
     width: 50%;
     background: #F6F5F7;
 }
+ul {
+    margin: 0; /* Обнуляем значение отступов */
+    padding: 4px; /* Значение полей */
+}
+ul li {
+    display: inline; /* Отображать как строчный элемент */
+    margin-right: 5px; /* Отступ слева */
+    border: 1px solid #000; /* Рамка вокруг текста */
+    padding: 3px; /* Поля вокруг текста */
+    border-radius: 4px;
+}
 #cologne{width:100%;font-size:small;margin-bottom: 20px;}
 #lcol{float:left;width:25%;}
 #rcol{float:right;width:25%;}
