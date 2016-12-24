@@ -28,7 +28,7 @@
     background: #F6F5F7;
 }
 #cologne{width:100%;font-size:small;margin-bottom: 20px;}
-#lcol{float:left;width:400px;}
-#rcol{float:right;width:400px;}
+#lcol{float:left;width:25%;}
+#rcol{float:right;width:25%;}
 
 /* </style> */
