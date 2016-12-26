@@ -17,15 +17,17 @@
 <!--<h1 id="num"></h1>-->
     <h4 id="category">Category:</h4>
     <div class="question" id="question">Nearly all artificial satellites are being charged with batteries powered by this</div>
-    <div class="button" id="click" type="submit" onclick="reload()">SKIP</div>
-    <!--<input type="button" value="SKIP" onclick="reload();"> -->
-    <!--<a href="javascript:Reload();" class="button">Link Button</a>-->
+    <div class="button" id="click">SKIP</div>
+    <div class="answered" id="answered"></div>
     <div class="constructor" id="constructor"><ul class="answer" id="answer"></ul></div>
     <ul class="letters" id="letters"></ul>
-
+    <div class="button" id="next">NEXT QUESTION</div>
 <script>
 //get question displayed
     var resp = JSON.parse(xhr.response);
+    var answer;
+    var correct = 0;
+    var total = 0;
     ReWrite();
     function ReWrite(){
         document.getElementById("question").innerHTML = resp[0].question;
@@ -33,32 +35,39 @@
         document.getElementById("category").innerHTML = "Category:"+resp[0].category.title;
 
         //answer would be here
+        destruct("letters");
+        destruct("answer");
         var unorderedList = document.getElementById("letters");
         for (i = 0; i < resp[0].answer.length; i++ ) {
             var item = document.createElement('button');
             item.appendChild(document.createTextNode(resp[0].answer[i]));
             item.setAttribute("id", "li"+i);
-            //item.attachEvent("onclick", changeDiv(item.id), false);
-            //item.addEventListener("click", changeDiv(item.id), false);
             unorderedList.appendChild(item);
-            //console.log(item.parentNode.id);
         }
         clickLi();
+        answer ="";
+        document.getElementById("answered").innerHTML = ""
+        document.getElementById("next").style.visibility = "hidden";
+
     }
-//SKIP button
-    var something = document.getElementById('click');
-    something.style.cursor = 'pointer';
-    something.onclick = function() {
-        Reload();
-        resp = JSON.parse(xhr.response);
-        ReWrite();
-    };
-    something.onmouseover = function() {
-        this.style.backgroundColor = 'grey';
-    };
-    something.onmouseout = function() {
-        this.style.backgroundColor = '';
-    };
+    //SKIP button
+    Click('click');
+    Click('next');
+    function Click(item){
+        var something = document.getElementById(item);
+        something.style.cursor = 'pointer';
+        something.onclick = function() {
+            Reload();
+            resp = JSON.parse(xhr.response);
+            ReWrite();
+        };
+        something.onmouseover = function() {
+            this.style.backgroundColor = 'grey';
+        };
+        something.onmouseout = function() {
+            this.style.backgroundColor = '';
+        };
+    }
 
 //send letters to answer box
     function clickLi() {
@@ -72,30 +81,42 @@
     function changeDiv() {
         var item = document.getElementById(this.id).parentNode.id;
         //console.log(this.id);
-        console.log(item);
+        //console.log(item);
                 if(item=="letters"){
                     document.getElementById("answer").appendChild(this);
+                    answer = answer+document.getElementById(this.id).innerHTML;
+                    //console.log(answer);
+                    if(!document.getElementById("letters").firstChild){
+                        if(answer==resp[0].answer){
+                            document.getElementById("answered").innerHTML = "Correct";
+                            document.getElementById("answered").style.color = "green";
+                            ++correct;
+                            document.getElementById("lcol").innerHTML = "Correct Answers: " +correct;
+                            ++total;
+                            document.getElementById("rcol").innerHTML = "Total Questions: " + total;
+                            document.getElementById("next").style.visibility = "visible";
+                        }else{
+                            document.getElementById("answered").innerHTML = "Incorrect";
+                            document.getElementById("answered").style.color = "red";
+                            ++total;
+                            document.getElementById("rcol").innerHTML = "Total Questions: " + total;
+                        }
+                    }
                 }else{
                     document.getElementById("letters").appendChild(this);
                 }
-        console.log(item);
+        //console.log(item);
     }
+function destruct(item){
+    var fc = document.getElementById(item).firstChild;
+    while(fc) {
+        document.getElementById(item).removeChild(fc);
+        fc = document.getElementById(item).firstChild;
+    }
+}
 
 
-    //var ul = document.getElementById("letters");
-    //var items = ul.getElementsByTagName("li");
-    //for (var i = 0; i < items.length; ++i) {
-        // do something with items[i], which is a <li> element
-    //}
-//    document.getElementById("click").onclick = function reload()
-//     {
-//        Reload();
-        //validation code to see State field is mandatory.
-//    }
 
-    //console.log(resp);
-    //console.log(resp[0].answer[0]);
-    //console.log(document.getElementById("num").innerText);
 </script>
 
 </body>
