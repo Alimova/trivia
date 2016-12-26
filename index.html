@@ -5,7 +5,7 @@
     <title>Trivia Quiz</title>
     <link href="bootstrap.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-
+    <script src="index.js"></script>
 
 </head>
 <body align="middle">
@@ -17,38 +17,84 @@
 <!--<h1 id="num"></h1>-->
     <h4 id="category">Category:</h4>
     <div class="question" id="question">Nearly all artificial satellites are being charged with batteries powered by this</div>
-    <div class="button" id="click" onclick="reload">SKIP</div>
-    <div class="constructor" id="constructor"></div>
+    <div class="button" id="click" type="submit" onclick="reload()">SKIP</div>
+    <!--<input type="button" value="SKIP" onclick="reload();"> -->
+    <!--<a href="javascript:Reload();" class="button">Link Button</a>-->
+    <div class="constructor" id="constructor"><ul class="answer" id="answer"></ul></div>
     <ul class="letters" id="letters"></ul>
 
-<script src="index.js"></script>
 <script>
+//get question displayed
     var resp = JSON.parse(xhr.response);
-    document.getElementById("question").innerHTML = resp[0].question;
-    document.getElementById("num").innerHTML = document.getElementById("num").innerHTML+resp[0].id;
-    document.getElementById("category").innerHTML = document.getElementById("category").innerHTML+resp[0].category.title;
+    ReWrite();
+    function ReWrite(){
+        document.getElementById("question").innerHTML = resp[0].question;
+        document.getElementById("num").innerHTML = "Question #"+resp[0].id;
+        document.getElementById("category").innerHTML = "Category:"+resp[0].category.title;
 
-    //answer would be here
-    var unorderedList = document.getElementById("letters");
-    for (i = 0; i < resp[0].answer.length; i++ ) {
-        var item = document.createElement('li');
-        item.appendChild(document.createTextNode(resp[0].answer[i]));
-        unorderedList.appendChild(item);
+        //answer would be here
+        var unorderedList = document.getElementById("letters");
+        for (i = 0; i < resp[0].answer.length; i++ ) {
+            var item = document.createElement('button');
+            item.appendChild(document.createTextNode(resp[0].answer[i]));
+            item.setAttribute("id", "li"+i);
+            //item.attachEvent("onclick", changeDiv(item.id), false);
+            //item.addEventListener("click", changeDiv(item.id), false);
+            unorderedList.appendChild(item);
+            //console.log(item.parentNode.id);
+        }
+        clickLi();
     }
+//SKIP button
+    var something = document.getElementById('click');
+    something.style.cursor = 'pointer';
+    something.onclick = function() {
+        Reload();
+        resp = JSON.parse(xhr.response);
+        ReWrite();
+    };
+    something.onmouseover = function() {
+        this.style.backgroundColor = 'grey';
+    };
+    something.onmouseout = function() {
+        this.style.backgroundColor = '';
+    };
+
+//send letters to answer box
+    function clickLi() {
+        var lis = document.getElementById("letters").getElementsByTagName('button');
+
+        for (var i = 0; i < lis.length; i++) {
+            lis[i].addEventListener('click', changeDiv, false);
+        }
+
+    }
+    function changeDiv() {
+        var item = document.getElementById(this.id).parentNode.id;
+        //console.log(this.id);
+        console.log(item);
+                if(item=="letters"){
+                    document.getElementById("answer").appendChild(this);
+                }else{
+                    document.getElementById("letters").appendChild(this);
+                }
+        console.log(item);
+    }
+
 
     //var ul = document.getElementById("letters");
     //var items = ul.getElementsByTagName("li");
     //for (var i = 0; i < items.length; ++i) {
         // do something with items[i], which is a <li> element
     //}
-    document.getElementById("click").onclick = function reload()
-    {
-        Reload();
+//    document.getElementById("click").onclick = function reload()
+//     {
+//        Reload();
         //validation code to see State field is mandatory.
-    }
+//    }
 
     //console.log(resp);
-    console.log(resp[0].answer[0]);
+    //console.log(resp[0].answer[0]);
     //console.log(document.getElementById("num").innerText);
 </script>
 

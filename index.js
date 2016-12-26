@@ -1,10 +1,11 @@
 /**
  * Created by alimov on 12/17/16.
  */
-const xhr = new XMLHttpRequest();
+var xhr = new XMLHttpRequest();
 function Reload(){
     xhr.open('GET', 'http://jservice.io/api/random', false);
     xhr.send();
+//    var resp = JSON.parse(xhr.response);
 }
 Reload();
 
