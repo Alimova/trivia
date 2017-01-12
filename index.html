@@ -34,19 +34,26 @@
         document.getElementById("num").innerHTML = "Question #"+resp[0].id;
         document.getElementById("category").innerHTML = "Category:"+resp[0].category.title;
 
-        //answer would be here
+        //add to Total if incorrect
+        if(answer!=resp[0].answer) {
+            ++total;
+            document.getElementById("rcol").innerHTML = "Total Questions: " + total;
+        }
+        //drawing answer buttons
         destruct("letters");
         destruct("answer");
         var unorderedList = document.getElementById("letters");
+        var shuffled = resp[0].answer.split('').sort(function(){return 0.5-Math.random()}).join(''); //shuffle letters
         for (i = 0; i < resp[0].answer.length; i++ ) {
             var item = document.createElement('button');
-            item.appendChild(document.createTextNode(resp[0].answer[i]));
+            //item.appendChild(document.createTextNode(resp[0].answer[i]));
+            item.appendChild(document.createTextNode(shuffled[i]));
             item.setAttribute("id", "li"+i);
             unorderedList.appendChild(item);
         }
         clickLi();
         answer ="";
-        document.getElementById("answered").innerHTML = ""
+        document.getElementById("answered").innerHTML = "";
         document.getElementById("next").style.visibility = "hidden";
 
     }
@@ -72,40 +79,42 @@
 //send letters to answer box
     function clickLi() {
         var lis = document.getElementById("letters").getElementsByTagName('button');
-
         for (var i = 0; i < lis.length; i++) {
-            lis[i].addEventListener('click', changeDiv, false);
+            lis[i].addEventListener('click', checkAnswer, false);
         }
 
     }
-    function changeDiv() {
-        var item = document.getElementById(this.id).parentNode.id;
-        //console.log(this.id);
-        //console.log(item);
-                if(item=="letters"){
+
+    function checkAnswer() {
+        //var item = document.getElementById(this.id).parentNode.id;
+                //if(item=="letters"){
+                if(document.getElementById(this.id).parentNode.id=="letters"){
                     document.getElementById("answer").appendChild(this);
                     answer = answer+document.getElementById(this.id).innerHTML;
-                    //console.log(answer);
                     if(!document.getElementById("letters").firstChild){
                         if(answer==resp[0].answer){
                             document.getElementById("answered").innerHTML = "Correct";
                             document.getElementById("answered").style.color = "green";
                             ++correct;
                             document.getElementById("lcol").innerHTML = "Correct Answers: " +correct;
-                            ++total;
-                            document.getElementById("rcol").innerHTML = "Total Questions: " + total;
+                            //++total;
+                            //document.getElementById("rcol").innerHTML = "Total Questions: " + total;
                             document.getElementById("next").style.visibility = "visible";
                         }else{
                             document.getElementById("answered").innerHTML = "Incorrect";
                             document.getElementById("answered").style.color = "red";
-                            ++total;
-                            document.getElementById("rcol").innerHTML = "Total Questions: " + total;
                         }
                     }
                 }else{
+                    //check clicks on constructor
                     document.getElementById("letters").appendChild(this);
+                    console.log(document.getElementById("answer").childNodes);
+
+                    //cut off letter from var answer
+
+                    //answered text disappear
+                    //document.getElementById("answered").innerHTML = "";
                 }
-        //console.log(item);
     }
 function destruct(item){
     var fc = document.getElementById(item).firstChild;
@@ -114,8 +123,6 @@ function destruct(item){
         fc = document.getElementById(item).firstChild;
     }
 }
-
-
 
 </script>
 
