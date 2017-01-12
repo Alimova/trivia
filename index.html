@@ -107,13 +107,11 @@
                     }
                 }else{
                     //check clicks on constructor
+
+                    updateAnswer(this);
                     document.getElementById("letters").appendChild(this);
-                    console.log(document.getElementById("answer").childNodes);
-
-                    //cut off letter from var answer
-
                     //answered text disappear
-                    //document.getElementById("answered").innerHTML = "";
+                    document.getElementById("answered").innerHTML = "";
                 }
     }
 function destruct(item){
@@ -122,6 +120,39 @@ function destruct(item){
         document.getElementById(item).removeChild(fc);
         fc = document.getElementById(item).firstChild;
     }
+}
+function updateAnswer(node){
+    //cut off letter from var answer
+    var l = findRow(node);
+    var length = answer.length;
+
+    //console.log(document.getElementById("answer").childNodes);
+
+    //console.log("l="+l)
+    //console.log("length="+length);
+    //console.log(answer.slice(0,l-1))
+    //console.log(answer.slice(l, length));
+    answer = answer.slice(0, l-1)+answer.slice(l, length-1);
+    //console.log(l);
+
+
+}
+
+function findRow(node){
+    var i=1;
+    //console.log(document.getElementById(this.id));
+    while( (node = node.previousSibling) != null ) {
+        i++;
+        //console.log(node.previousSibling);
+    }
+//    while(node.previousSibling){
+//        node = node.previousSibling;
+//        if(node.nodeType === 1){
+//            i++;
+//        }
+    return i;
+//    }
+
 }
 
 </script>
